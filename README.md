@@ -1,16 +1,29 @@
-# React + Vite
+# turnoVibe
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Bienvenidos al repositorio de **TurnoVibe**, una plataforma web pensada para digitalizar y simplificar la reserva de turnos en peluquerías y barberías. 
 
-Currently, two official plugins are available:
+Este proyecto nace como trabajo práctico para la materia **Laboratorio de Tecnologías** (Ingeniería en Informática, 2026).
+Alumnos: Diego Cuello - Flores Rosa Maria
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## De qué trata el proyecto.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+El objetivo principal es resolver dos problemas típicos que sufren las peluquerías: los clavos de última hora (*no-shows*) y los turnos pisados (*double-booking*). 
 
-## Expanding the Oxlint configuration
+Para solucionar esto, **TurnoVibe** le permite a cualquier cliente agendar una cita al instante **sin necesidad de registrarse o crearse una cuenta**. Cuando elegís un horario, el sistema lo bloquea automáticamente durante 15 minutos mientras realizás el pago obligatorio por Mercado Pago. Si el pago se aprueba, la cita queda confirmada de una. Además, el dueño tiene un panel de administración para controlar a los peluqueros, los horarios y las reservas del día.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+---
+
+## Lo que tenemos hecho hasta ahora (Fase Actual)
+
+Actualmente completamos la **etapa inicial de maquetado estático**, cumpliendo con los requerimientos académicos de HTML5 y CSS3 nativo antes de pasar a React:
+
+* **Estructura HTML5 Semántica:** Usamos `<header>`, `<nav>`, `<main>`, `<section>`, `<article>` y `<footer>` sin meter `<div>` innecesarios para las regiones principales.
+* **Variables CSS (`:root`) & Diseño Responsive:** Manejo centralizado de colores, sombras y radios de borde en `./src/estilos.css`.
+* **Formulario Completo:** Con validaciones nativas de HTML5 (campos requeridos, selección de fecha con límites `min/max`, teléfono, correo, etc.).
+* **Páginas Secundarias e Interactividad:**
+  * `index.html`: Página principal con el formulario de reserva e imagen de fondo full screen.
+  * `servicios.html`: Tabla de datos con precios y tiempos por servicio.
+  * `peluqueros.html`: Lista de miembros del equipo con índice ordenado y marcadores internos para saltar de sección.
+  * `admin.html`: Vista previa del inicio de sesión y panel de control para el administrador.
