@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administración - TurnoVibe</title>
+  <link rel="stylesheet" href="./src/estilos.css">
+</head>
+<body>
+
+  <header id="main-header">
+    <h1>TurnoVibe Panel</h1>
+    <nav class="navbar">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="servicios.html">Servicios y Precios</a></li>
+        <li><a href="peluqueros.html">Peluqueros</a></li>
+        <li><a href="admin.html">Administración</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card-container">
+      <h2 class="section-title">Acceso de Administrador</h2>
+      
+      <!-- Formulario Login Admin -->
+      <form action="#" method="POST">
+        <div class="form-group">
+          <label for="admin-email">Correo Administrador</label>
+          <input type="email" id="admin-email" name="admin-email" required>
+        </div>
+        <div class="form-group">
+          <label for="admin-pass">Contraseña</label>
+          <input type="password" id="admin-pass" name="admin-pass" required>
+        </div>
+        <button type="submit" class="btn-primary">Ingresar al Panel</button>
+      </form>
+    </section>
+
+    <!-- Vista Previa Tabla de Gestión CRUD -->
+    <section class="card-container">
+      <h3>Turnos Agendados del Día</h3>
+      <table class="table-data">
+        <caption>Agenda Global (Vista Admin)</caption>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Servicio</th>
+            <th>Peluquero</th>
+            <th>Hora</th>
+            <th>Estado Pago</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Carlos Gómez</td>
+            <td>Corte</td>
+            <td>Lucas Sosa</td>
+            <td>10:00 hs</td>
+            <td><span style="color: green; font-weight: 600;">Aprobado</span></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div style="margin-top: 1.5rem;">
+        <a href="index.html" class="btn-primary" style="text-decoration: none; display: inline-block;">Regresar al Inicio</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 TurnoVibe Inc. Laboratorio de Tecnologías.</p>
+  </footer>
+
+</body>
+</html>
