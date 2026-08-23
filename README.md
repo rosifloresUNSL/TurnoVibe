@@ -11,7 +11,7 @@ Alumnos: Diego Cuello - Flores Rosa Maria
 
 El objetivo principal es resolver dos problemas típicos que sufren las peluquerías: los clavos de última hora (*no-shows*) y los turnos pisados (*double-booking*). 
 
-Para solucionar esto, **TurnoVibe** le permite a cualquier cliente agendar una cita al instante **sin necesidad de registrarse o crearse una cuenta**. Cuando elegís un horario, el sistema lo bloquea automáticamente durante 15 minutos mientras realizás el pago obligatorio por Mercado Pago. Si el pago se aprueba, la cita queda confirmada de una. Además, el dueño tiene un panel de administración para controlar a los peluqueros, los horarios y las reservas del día.
+Para solucionar esto, **TurnoVibe** le permite a cualquier cliente agendar una cita al instante **sin necesidad de registrarse o crearse una cuenta**. Cuando elegís un horario, el sistema lo bloquea automáticamente durante 15 minutos mientras realizás el pago obligatorio por Mercado Pago. Si el pago se aprueba, la cita queda confirmada. Además, el dueño tiene un panel de administración para controlar a los peluqueros, los horarios y las reservas del día.
 
 ---
 
