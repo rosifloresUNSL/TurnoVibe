@@ -1,13 +1,83 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BarberSync - Reserva de Turnos</title>
+  <link rel="stylesheet" href="./src/estilos.css">
+</head>
+<body>
+
+  <header id="main-header">
+    <h1>TurnoVibe</h1>
+   
+    <nav class="navbar">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="servicios.html">Servicios y Precios</a></li>
+        <li><a href="peluqueros.html">Peluqueros</a></li>
+        <li><a href="admin.html">Administración</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero-image-container" style="margin-bottom: 2rem; text-align: center;">
+      <img src="./img/hero-bg.jpg" 
+           alt="Interior del salón de peluquería TurnoVibe" 
+           class="hero-img">
+    </section>
+
+    <section class="card-container">
+      <h2 class="section-title">Reserva tu Turno</h2>
+      <p>Selecciona tu servicio y horario. El turno quedará bloqueado por 15 minutos para concretar el pago.</p>
+      
+      <form action="#" method="POST" style="margin-top: 1.5rem;">
+        
+        <div class="form-group">
+          <label for="nombre">Nombre Completo</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ej. Juan Pérez" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Telefono de Contacto</label>
+          <input type="tel" id="telefono" name="telefono" placeholder="+54 2664 123456" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo Electrónico</label>
+          <input type="email" id="email" name="email" placeholder="juan@ejemplo.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="fecha">Fecha de Reserva</label>
+          <input type="date" id="fecha" name="fecha" min="2026-08-22" max="2026-12-31" required>
+        </div>
+
+        <div class="form-group">
+          <label for="servicio">Selecciona el Servicio</label>
+          <select id="servicio" name="servicio" required>
+            <option value="">-- Selecciona un servicio --</option>
+            <option value="corte">Corte Clásico ($15.000)</option>
+            <option value="color">Coloración Completa ($28.000)</option>
+            <option value="barberia">Barbería & Barba ($12.000)</option>
+            <option value="combo">Combo Corte + Barba ($22.000)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="comentarios">Comentarios o Preferencias Adicionales</label>
+          <textarea id="comentarios" name="comentarios" rows="4" placeholder="Indícanos si tienes alguna preferencia de estilo..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary">Continuar al Pago</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 TurnoVibe Inc. Todos los derechos reservados. Laboratorio de Tecnologías.</p>
+  </footer>
+
+</body>
 </html>
