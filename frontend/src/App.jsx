@@ -1,121 +1,85 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Navbar from './shared/layout/header'
+import Footer from './shared/layout/footer'
+import Servicios from './pages/publico/servicios'
+import Peluqueros from './pages/publico/peluqueros'
+import heroBg from './assets/imagenes/hero-bg.jpg' // Opcional: si prefieres importarla arriba
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+// Componente para la página de inicio (Home) con tu formulario adaptado
+function Home() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+    <main className="container mt-4 mb-5">
+      <section className="hero-image-container" style={{ marginBottom: '2rem', textAlign: 'center' }}>
+        <img 
+          src={heroBg} // Si prefieres usar la ruta directa, puedes poner src="./assets/hero-bg.jpg"
+          alt="Interior del salón de peluquería TurnoVibe" 
+          className="hero-img img-fluid" 
+        />
       </section>
 
-      <div className="ticks"></div>
+      <section className="card-container p-4 border rounded bg-light">
+        <h2 className="section-title mb-3">Reserva tu Turno</h2>
+        <p className="text-muted">Selecciona tu servicio y horario. El turno quedará bloqueado por 15 minutos para concretar el pago.</p>
+        
+        <form onSubmit={(e) => e.preventDefault()} style={{ marginTop: '1.5rem' }}>
+          
+          <div className="form-group mb-3">
+            <label htmlFor="nombre">Nombre Completo</label>
+            <input type="text" id="nombre" name="nombre" className="form-control" placeholder="Ej. Juan Pérez" required />
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
+          <div className="form-group mb-3">
+            <label htmlFor="telefono">Teléfono de Contacto</label>
+            <input type="tel" id="telefono" name="telefono" className="form-control" placeholder="+54 2664 123456" required />
+          </div>
+
+          <div className="form-group mb-3">
+            <label htmlFor="email">Correo Electrónico</label>
+            <input type="email" id="email" name="email" className="form-control" placeholder="juan@ejemplo.com" required />
+          </div>
+
+          <div className="form-group mb-3">
+            <label htmlFor="fecha">Fecha de Reserva</label>
+            <input type="date" id="fecha" name="fecha" className="form-control" min="2026-08-22" max="2026-12-31" required />
+          </div>
+
+          <div className="form-group mb-3">
+            <label htmlFor="servicio">Selecciona el Servicio</label>
+            <select id="servicio" name="servicio" className="form-control" required defaultValue="">
+              <option value="" disabled>-- Selecciona un servicio --</option>
+              <option value="corte">Corte Clásico ($15.000)</option>
+              <option value="color">Coloración Completa ($28.000)</option>
+              <option value="barberia">Barbería & Barba ($12.000)</option>
+              <option value="combo">Combo Corte + Barba ($22.000)</option>
+            </select>
+          </div>
+
+          <div className="form-group mb-3">
+            <label htmlFor="comentarios">Comentarios o Preferencias Adicionales</label>
+            <textarea id="comentarios" name="comentarios" className="form-control" rows="4" placeholder="Indícanos si tienes alguna preferencia de estilo..."></textarea>
+          </div>
+
+          <button type="submit" className="btn btn-primary">Continuar al Pago</button>
+        </form>
       </section>
+    </main>
+  )
+}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+function App() {
+  return (
+    <Router>
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/servicios" element={<Servicios />} />
+        <Route path="/peluqueros" element={<Peluqueros />} />
+      </Routes>
+
+      <Footer />
+    </Router>
   )
 }
 
