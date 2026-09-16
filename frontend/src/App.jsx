@@ -6,7 +6,6 @@ import Peluqueros from './feactures/publico/peluqueros'
 import heroBg from './assets/imagenes/hero-bg.jpg' // Opcional: si prefieres importarla arriba
 import './App.css'
 
-// Componente para la página de inicio (Home) con tu formulario adaptado
 function Home() {
   return (
     <main className="container mt-4 mb-5">
