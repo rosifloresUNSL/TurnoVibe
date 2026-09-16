@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './shared/layout/header'
 import Footer from './shared/layout/footer'
-import Servicios from './pages/publico/servicios'
-import Peluqueros from './pages/publico/peluqueros'
+import Servicios from './feactures/publico/servicios'
+import Peluqueros from './feactures/publico/peluqueros'
 import heroBg from './assets/imagenes/hero-bg.jpg' // Opcional: si prefieres importarla arriba
 import './App.css'
 
