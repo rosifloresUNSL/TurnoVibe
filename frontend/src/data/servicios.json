@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "nombre": "Corte de Cabello & Peinado",
+    "categoria": "Peluquería",
+    "duracion": "45 min",
+    "precio": 8500,
+    "descripcion": "Corte personalizado con lavado, asesoramiento de imagen y peinado final."
+  },
+  {
+    "id": 2,
+    "nombre": "Perfilado de Barba",
+    "categoria": "Barbería",
+    "duracion": "30 min",
+    "precio": 5000,
+    "descripcion": "Recorte, delineado con navaja y tratamiento de aceites hidratantes."
+  },
+  {
+    "id": 3,
+    "nombre": "Limpieza Facial Profunda",
+    "categoria": "Estética",
+    "duracion": "60 min",
+    "precio": 12000,
+    "descripcion": "Exfoliación, extracción de impurezas, máscara descongestiva y masajes."
+  },
+  {
+    "id": 4,
+    "nombre": "Manicura Rusa",
+    "categoria": "Uñas",
+    "duracion": "50 min",
+    "precio": 7500,
+    "descripcion": "Tratamiento intensivo de cutículas con torno y esmaltado semipermanente."
+  }
+]

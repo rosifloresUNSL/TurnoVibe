@@ -1,0 +1,42 @@
+[
+  {
+    "id": 101,
+    "servicioId": 1,
+    "profesional": "Lucas Gómez",
+    "fecha": "2026-10-01",
+    "hora": "10:00",
+    "disponible": true
+  },
+  {
+    "id": 102,
+    "servicioId": 1,
+    "profesional": "Lucas Gómez",
+    "fecha": "2026-10-01",
+    "hora": "11:00",
+    "disponible": false
+  },
+  {
+    "id": 103,
+    "servicioId": 1,
+    "profesional": "María Silva",
+    "fecha": "2026-10-01",
+    "hora": "15:00",
+    "disponible": true
+  },
+  {
+    "id": 104,
+    "servicioId": 2,
+    "profesional": "Carlos Pérez",
+    "fecha": "2026-10-01",
+    "hora": "14:00",
+    "disponible": true
+  },
+  {
+    "id": 105,
+    "servicioId": 3,
+    "profesional": "Ana Martínez",
+    "fecha": "2026-10-02",
+    "hora": "09:00",
+    "disponible": true
+  }
+]
