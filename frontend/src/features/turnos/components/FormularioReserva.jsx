@@ -2,7 +2,6 @@ import { useState, useRef } from 'react';
 import { validarFormularioReserva } from '../utils/validaciones';
 
 export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enConfirmacionExitosa }) {
-  // 1. Estado centralizado para el formulario
   const [valores, setValores] = useState({
     nombre: '',
     email: '',
@@ -10,20 +9,16 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
     notas: ''
   });
 
-  // 2. Estado para almacenar errores de validación
   const [errores, setErrores] = useState({});
 
-  // 3. Estado de ciclo de vida del envío ('escribiendo' | 'enviando' | 'enviado')
   const [estadoEnvio, setEstadoEnvio] = useState('escribiendo');
 
-  // 4. Referencias a los inputs para mover el foco al primer campo con error
   const inputRefs = {
     nombre: useRef(null),
     email: useRef(null),
     telefono: useRef(null)
   };
 
-  // Manejador genérico de cambios en inputs controlados
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValores((prev) => ({
@@ -31,7 +26,6 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
       [name]: value
     }));
 
-    // Si el campo modificado tenía un error, lo limpiamos progresivamente
     if (errores[name]) {
       setErrores((prev) => ({
         ...prev,
@@ -43,13 +37,11 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Ejecutar función pura de validación
     const nuevosErrores = validarFormularioReserva(valores);
     setErrores(nuevosErrores);
 
     const camposConError = Object.keys(nuevosErrores);
 
-    // Si hay errores, enfocamos el primer input fallido con useRef
     if (camposConError.length > 0) {
       const primerCampoConError = camposConError[0];
       if (inputRefs[primerCampoConError] && inputRefs[primerCampoConError].current) {
@@ -58,7 +50,6 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
       return;
     }
 
-    // Simulación de envío de datos al servidor
     setEstadoEnvio('enviando');
 
     setTimeout(() => {
@@ -87,7 +78,7 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
     <form onSubmit={handleSubmit} noValidate className="mt-4 border-top pt-4">
       <h5 className="fw-bold mb-3">Paso 3: Complete sus datos de contacto</h5>
 
-      {/* Campo Nombre */}
+
       <div className="mb-3">
         <label htmlFor="nombre" className="form-label fw-bold">
           Nombre y Apellido *
@@ -106,7 +97,6 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
         {errores.nombre && <div className="invalid-feedback">{errores.nombre}</div>}
       </div>
 
-      {/* Campo Email */}
       <div className="mb-3">
         <label htmlFor="email" className="form-label fw-bold">
           Correo Electrónico *
@@ -125,7 +115,6 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
         {errores.email && <div className="invalid-feedback">{errores.email}</div>}
       </div>
 
-      {/* Campo Teléfono */}
       <div className="mb-3">
         <label htmlFor="telefono" className="form-label fw-bold">
           Teléfono de Contacto *
@@ -144,7 +133,6 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
         {errores.telefono && <div className="invalid-feedback">{errores.telefono}</div>}
       </div>
 
-      {/* Campo Notas (Opcional) */}
       <div className="mb-3">
         <label htmlFor="notas" className="form-label fw-bold">
           Notas o Preferencias (Opcional)
