@@ -1,27 +1,36 @@
-# turnoVibe
+# TurnoVibe
 
-Bienvenidos al repositorio de **TurnoVibe**, una plataforma web pensada para digitalizar y simplificar la reserva de turnos en peluquerías y barberías. 
-
-Este proyecto nace como trabajo práctico para la materia **Laboratorio de Tecnologías** (Ingeniería en Informática, 2026).
-Alumnos: Diego Cuello - Flores Rosa Maria
+Plataforma web para reservas de barbería sin registro, con prevención de *double-booking* y control de ausentismo.  
+**Materia:** Laboratorio de Tecnologías (2026) | **Alumnos:** Diego Cuello — Rosa María Flores - Alexis Rodriguez
 
 ---
 
-## De qué trata el proyecto.
+## Características
 
-El objetivo principal es resolver dos problemas típicos que sufren las peluquerías: los turnos de última hora (*no-shows*) y los turnos pisados (*double-booking*). 
-
-Para solucionar esto, **TurnoVibe** le permite a cualquier cliente agendar una cita al instante **sin necesidad de registrarse o crearse una cuenta**. Cuando elegís un horario, el sistema lo bloquea automáticamente durante 15 minutos mientras realizás el pago obligatorio por Mercado Pago. Si el pago se aprueba, la cita queda confirmada. Además, el dueño tiene un panel de administración para controlar a los peluqueros, los horarios y las reservas del día.
+* **Stack:** React, Vite, Bootstrap 5, React Router v8.
+* **Reserva sin login:** 
+  * Multiselección de servicios (Corte, Barba, Decoloración de 30 min c/u).
+  * Cálculo dinámico de bloques continuos (30, 60 o 90 min).
+  * Modalidades: **Por Peluquero** o **Siguiente Disponible**.
+* **Roles y Seguridad:**
+  * **Admin:** Métricas globales, CRUD de peluqueros y agenda unificada.
+  * **Staff:** Métricas propias, agenda personal y bloqueo manual de turnos.
+* **Checkout (En progreso):** Bloqueo temporal de 15 minutos con Mercado Pago.
 
 ---
 
-## Lo que tenemos hecho hasta ahora (Fase Actual)
+## Usuarios de Prueba
 
-Actualmente completamos la **etapa inicial de maquetado estático**, cumpliendo con los requerimientos académicos de HTML5 y CSS3 nativo antes de pasar a React:
+* **Admin:** `admin@turnovibe.com` / `admin`
+* **Staff:** `franco@turnovibe.com` / `staff`
 
-* **Estructura HTML5 Semántica:** Usamos `<header>`, `<nav>`, `<main>`, `<section>`, `<article>` y `<footer>` sin meter `<div>` innecesarios para las regiones principales.
-* **Variables CSS (`:root`) & Diseño Responsive:** Manejo centralizado de colores, sombras y radios de borde en `./src/estilos.css`.
-* **Formulario Completo:** Con validaciones nativas de HTML5 (campos requeridos, selección de fecha con límites `min/max`, teléfono, correo, etc.).
+---
+
+## Inicio Rápido
+
+```bash
+npm install
+npm run dev
 * **Páginas Secundarias e Interactividad:**
   * `index.html`: Página principal con el formulario de reserva e imagen de fondo full screen.
   * `servicios.html`: Tabla de datos con precios y tiempos por servicio.
