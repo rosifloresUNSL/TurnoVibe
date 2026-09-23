@@ -1,21 +1,17 @@
-import { Outlet } from 'react-router';
-import { Navbar } from './Navbar';
-import { Footer } from './Footer';
+import { createBrowserRouter } from 'react-router-dom';
+import { PublicLayout } from '../shared/layout/PublicLayout';
+import { HomePage } from '../features/home/pages/HomePage';
+import { ServiciosPage } from '../features/servicios/pages/ServiciosPage';
+import { ReservarTurnoPage } from '../features/turnos/pages/ReservarTurnoPage';
 
-export function PublicLayout() {
-  const enlacesNavegacion = [
-    { path: '/', etiqueta: 'Inicio' },
-    { path: '/servicios', etiqueta: 'Servicios' },
-    { path: '/turnos', etiqueta: 'Reservar Turno' }
-  ];
-
-  return (
-    <div className="d-flex flex-column min-vh-100">
-      <Navbar marca="TURNOVIBE" enlaces={enlacesNavegacion} />
-      <main className="flex-grow-1">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
-  );
-}
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <PublicLayout />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: 'servicios', element: <ServiciosPage /> },
+      { path: 'turnos', element: <ReservarTurnoPage /> },
+    ],
+  },
+]);
