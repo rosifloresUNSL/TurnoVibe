@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "nombre": "Franco",
+    "agenda": [
+      { "hora": "09:00", "ocupado": false },
+      { "hora": "09:30", "ocupado": false },
+      { "hora": "10:00", "ocupado": false },
+      { "hora": "10:30", "ocupado": true },
+      { "hora": "11:00", "ocupado": false },
+      { "hora": "11:30", "ocupado": false },
+      { "hora": "12:00", "ocupado": false }
+    ]
+  },
+  {
+    "id": 2,
+    "nombre": "Mateo",
+    "agenda": [
+      { "hora": "09:00", "ocupado": false },
+      { "hora": "09:30", "ocupado": true },
+      { "hora": "10:00", "ocupado": false },
+      { "hora": "10:30", "ocupado": false },
+      { "hora": "11:00", "ocupado": false },
+      { "hora": "11:30", "ocupado": false }
+    ]
+  }
+]
