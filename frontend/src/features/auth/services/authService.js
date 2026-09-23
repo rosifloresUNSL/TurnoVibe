@@ -1,28 +1,43 @@
+import usuariosData from '../../../data/usuarios.json';
+
+const CLAVE_SESION = 'turnovibe_sesion';
+
 export const authService = {
-  login: async (email, password) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email === 'admin@turnovibe.com' && password === 'admin123') {
-          const usuario = { id: 1, nombre: 'Administrador', email, rol: 'gestor' };
-          localStorage.setItem('turnovibe_session', JSON.stringify(usuario));
-          resolve(usuario);
-        } else {
-          reject(new Error('Credenciales inválidas. Pruebe admin@turnovibe.com / admin123'));
-        }
-      }, 500);
-    });
+  login(email, password) {
+    const usuario = usuariosData.find(
+      (u) => u.email.trim().toLowerCase() === email.trim().toLowerCase() && u.password === password
+    );
+
+    if (usuario) {
+      const datosSesion = {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+        rol: usuario.rol,
+        peluqueroId: usuario.peluqueroId || null
+      };
+      localStorage.setItem(CLAVE_SESION, JSON.stringify(datosSesion));
+      return { exito: true, usuario: datosSesion };
+    }
+
+    return { exito: false, mensaje: 'Credenciales inválidas' };
   },
 
-  logout: () => {
-    localStorage.removeItem('turnovibe_session');
+  logout() {
+    localStorage.removeItem(CLAVE_SESION);
   },
 
-  obtenerSesion: () => {
-    const session = localStorage.getItem('turnovibe_session');
-    return session ? JSON.parse(session) : null;
+  estaAutenticado() {
+    return !!localStorage.getItem(CLAVE_SESION);
   },
 
-  estaAutenticado: () => {
-    return localStorage.getItem('turnovibe_session') !== null;
+  obtenerUsuario() {
+    const sesion = localStorage.getItem(CLAVE_SESION);
+    return sesion ? JSON.parse(sesion) : null;
+  },
+
+  // Alias para mantener compatibilidad con GestorLayout
+  obtenerSesion() {
+    return this.obtenerUsuario();
   }
 };

@@ -1,0 +1,25 @@
+[
+  {
+    "id": 100,
+    "email": "admin@turnovibe.com",
+    "password": "admin",
+    "nombre": "Dueño TurnoVibe",
+    "rol": "admin"
+  },
+  {
+    "id": 101,
+    "email": "franco@turnovibe.com",
+    "password": "staff",
+    "nombre": "Franco",
+    "rol": "peluquero",
+    "peluqueroId": 1
+  },
+  {
+    "id": 102,
+    "email": "mateo@turnovibe.com",
+    "password": "staff",
+    "nombre": "Mateo",
+    "rol": "peluquero",
+    "peluqueroId": 2
+  }
+]
