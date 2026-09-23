@@ -6,14 +6,12 @@
 export function validarFormularioReserva(valores) {
   const errores = {};
 
-  // Validar Nombre
   if (!valores.nombre || !valores.nombre.trim()) {
     errores.nombre = 'El nombre y apellido son obligatorios.';
   } else if (valores.nombre.trim().length < 3) {
     errores.nombre = 'El nombre debe tener al menos 3 caracteres.';
   }
 
-  // Validar Email
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!valores.email || !valores.email.trim()) {
     errores.email = 'El correo electrónico es obligatorio.';
@@ -21,7 +19,6 @@ export function validarFormularioReserva(valores) {
     errores.email = 'Ingrese un formato de correo electrónico válido.';
   }
 
-  // Validar Teléfono
   if (!valores.telefono || !valores.telefono.trim()) {
     errores.telefono = 'El teléfono de contacto es obligatorio.';
   } else if (valores.telefono.trim().length < 8) {

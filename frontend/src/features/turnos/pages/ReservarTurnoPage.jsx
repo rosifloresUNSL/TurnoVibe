@@ -41,7 +41,6 @@ export function ReservarTurnoPage() {
       <h2 className="fw-bold mb-4">Reserva de Turno Interactiva</h2>
 
       <div className="card shadow-sm p-4 mb-4">
-        {/* Paso 1: Selección de Servicio */}
         <div className="mb-3">
           <label htmlFor="servicioSelect" className="form-label fw-bold">
             Paso 1: Seleccione un Servicio
@@ -63,7 +62,7 @@ export function ReservarTurnoPage() {
           </select>
         </div>
 
-        {/* Paso 2: Selección de Horario */}
+        
         {servicioSeleccionado && !reservaConfirmada && (
           <div className="mt-4">
             <h5 className="fw-bold">Paso 2: Elija un Horario Disponible</h5>
@@ -79,7 +78,6 @@ export function ReservarTurnoPage() {
           </div>
         )}
 
-        {/* Paso 3: Formulario Controlado de Confirmación */}
         {turnoSeleccionado && (
           <FormularioReserva
             turnoSeleccionado={turnoSeleccionado}

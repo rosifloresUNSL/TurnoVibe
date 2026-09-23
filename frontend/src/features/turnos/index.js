@@ -1,4 +1,5 @@
 export { ReservarTurnoPage } from './pages/ReservarTurnoPage';
-export { turnosService } from './services/turnosService';
-export { ListaTurnos } from './components/ListaTurnos';
+export { PanelGestorPage } from './pages/PanelGestorPage';
+export { turnosService } from '../servicios/services/turnosService';
+export { ListaTurnos } from '../servicios/components/ListaTurnos';
 export { FormularioReserva } from './components/FormularioReserva';
