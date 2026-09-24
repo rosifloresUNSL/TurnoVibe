@@ -23,7 +23,7 @@ export function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/reservar" className="nav-link">
+              <Link to="/turnos" className="nav-link">
                 Reservar Turno
               </Link>
             </li>
