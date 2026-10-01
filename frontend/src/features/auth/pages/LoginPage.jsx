@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../services/authService';
+import { useAuth } from '../../../context/AuthContext';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const {login} = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    const resultado = authService.login(email, password);
+    const resultado = login(email, password);
 
     if (resultado.exito) {
       const rol = resultado.usuario.rol;

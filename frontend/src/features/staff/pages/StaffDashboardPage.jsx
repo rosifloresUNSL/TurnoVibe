@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import peluquerosIniciales from '../../../data/peluqueros.json';
 
@@ -8,7 +9,7 @@ export function StaffDashboardPage() {
   // Buscar la agenda personal del peluquero logueado
   const peluqueroActual = peluquerosIniciales.find(
     (p) => String(p.id) === String(usuario?.peluqueroId)
-  ) || peluquerosIniciales[0];
+  );
 
   const [agendaPersonal, setAgendaPersonal] = useState(peluqueroActual.agenda || []);
   const [clienteManual, setClienteManual] = useState('');
@@ -31,9 +32,27 @@ export function StaffDashboardPage() {
     setHoraManual('');
   };
 
+  if (!peluqueroActual) {
+    return (
+      <div className="container py-4">
+        <div className="alert alert-warning" role="alert">
+          Tu usuario no tiene una agenda de peluquero asociada.
+          {usuario?.rol === 'admin' && (
+            <>
+              {' '}
+              <Link to="/admin/dashboard" className="alert-link">
+                Ir al panel de administración
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container py-4">
-      <h2 className="fw-bold mb-1">Mi Agenda - {usuario?.nombre}</h2>
+      <h2 className="fw-bold mb-1">Mi Agenda - {usuario.nombre}</h2>
       <p className="text-muted mb-4">Panel individual del Staff</p>
 
       {/* 3.2 Dashboard Individual */}

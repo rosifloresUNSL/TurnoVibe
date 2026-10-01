@@ -2,7 +2,6 @@ import { Link } from 'react-router';
 
 export function HomePage() {
   return (
-    <>
     <div className="container py-5 text-center">
       <h1 className="display-4 fw-bold mb-3">Bienvenido a TURNOVIBE</h1>
       <p className="lead mb-4">
@@ -15,9 +14,5 @@ export function HomePage() {
         Ver Servicios
       </Link>
     </div>
-
-    div
-
-    </>
   );
 }

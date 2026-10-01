@@ -12,7 +12,7 @@ export const serviciosService = {
   obtenerPorId: async (id) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const servicio = serviciosData.find((s) => s.id === Number(id));
+        const servicio = serviciosData.find((s) => s.id === String(id));
         if (servicio) {
           resolve(servicio);
         } else {

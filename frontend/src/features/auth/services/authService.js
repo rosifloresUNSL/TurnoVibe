@@ -28,16 +28,22 @@ export const authService = {
   },
 
   estaAutenticado() {
-    return !!localStorage.getItem(CLAVE_SESION);
+    return this.obtenerUsuario() !== null;
   },
 
   obtenerUsuario() {
-    const sesion = localStorage.getItem(CLAVE_SESION);
-    return sesion ? JSON.parse(sesion) : null;
+    try {
+      const sesion = localStorage.getItem(CLAVE_SESION);
+      return sesion ? JSON.parse(sesion) : null;
+    } catch {
+      // Si el valor guardado está corrupto, se descarta la sesión.
+      localStorage.removeItem(CLAVE_SESION);
+      return null;
+    }
   },
 
   // Alias para mantener compatibilidad con GestorLayout
-  obtenerSesion() {
+  /*obtenerSesion() {
     return this.obtenerUsuario();
-  }
+  }*/
 };

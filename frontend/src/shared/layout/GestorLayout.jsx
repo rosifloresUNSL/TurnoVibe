@@ -1,12 +1,12 @@
 import { Outlet, Link, useNavigate } from 'react-router';
-import { authService } from '../../features/auth';
+import { useAuth } from '../../context/AuthContext';
 
 export function GestorLayout() {
   const navigate = useNavigate();
-  const usuario = authService.obtenerUsuario();
+  const { usuario, logout } = useAuth();
 
   const handleCerrarSesion = () => {
-    authService.logout();
+    logout();
     navigate('/login');
   };
 

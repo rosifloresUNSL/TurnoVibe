@@ -4,14 +4,12 @@ import { GestorLayout } from '../shared/layout/GestorLayout';
 import { NoEncontradaPage } from '../shared/pages/NoEncontradaPage';
 import { HomePage } from '../features/home';
 import { ServiciosPage } from '../features/servicios';
-import { ReservarTurnoPage, PanelGestorPage } from '../features/turnos';
+import { ReservarTurnoPage } from '../features/turnos';
 import { LoginPage, authService } from '../features/auth';
-
-// Importaciones para las vistas agregadas en el Punto 3 y Punto 4
 import { AdminDashboardPage } from '../features/admin/pages/AdminDashboardPage';
 import { StaffDashboardPage } from '../features/staff/pages/StaffDashboardPage';
 
-// Guardias de Autenticación
+// Guardias de autenticación
 const protegerRutaAutenticada = () => {
   if (!authService.estaAutenticado()) {
     return redirect('/login');
@@ -25,7 +23,7 @@ const protegerRutaAdmin = () => {
   }
   const usuario = authService.obtenerUsuario();
   if (usuario?.rol !== 'admin') {
-    return redirect('/staff/dashboard'); // Redirigir al staff si intenta entrar a admin
+    return redirect('/staff/dashboard');
   }
   return null;
 };
@@ -47,23 +45,10 @@ export const router = createBrowserRouter([
     path: '/',
     element: <PublicLayout />,
     children: [
-      {
-        index: true,
-        element: <HomePage />
-      },
-      {
-        path: 'servicios',
-        element: <ServiciosPage />
-      },
-      {
-        path: 'turnos',
-        element: <ReservarTurnoPage />
-      },
-      {
-        path: 'login',
-        loader: redirigirSiAutenticado,
-        element: <LoginPage />
-      }
+      { index: true, element: <HomePage /> },
+      { path: 'servicios', element: <ServiciosPage /> },
+      { path: 'turnos', element: <ReservarTurnoPage /> },
+      { path: 'login', loader: redirigirSiAutenticado, element: <LoginPage /> }
     ]
   },
 
@@ -73,14 +58,8 @@ export const router = createBrowserRouter([
     element: <GestorLayout />,
     loader: protegerRutaAdmin,
     children: [
-      {
-        index: true,
-        element: <AdminDashboardPage />
-      },
-      {
-        path: 'dashboard',
-        element: <AdminDashboardPage />
-      }
+      { index: true, element: <AdminDashboardPage /> },
+      { path: 'dashboard', element: <AdminDashboardPage /> }
     ]
   },
 
@@ -90,33 +69,11 @@ export const router = createBrowserRouter([
     element: <GestorLayout />,
     loader: protegerRutaAutenticada,
     children: [
-      {
-        index: true,
-        element: <StaffDashboardPage />
-      },
-      {
-        path: 'dashboard',
-        element: <StaffDashboardPage />
-      }
-    ]
-  },
-
-  /* COMPATIBILIDAD CON VISTA DE GESTOR GENERAL */
-  {
-    path: '/gestor',
-    element: <GestorLayout />,
-    loader: protegerRutaAutenticada,
-    children: [
-      {
-        index: true,
-        element: <PanelGestorPage />
-      }
+      { index: true, element: <StaffDashboardPage /> },
+      { path: 'dashboard', element: <StaffDashboardPage /> }
     ]
   },
 
   /* RUTA CAPTURA 404 */
-  {
-    path: '*',
-    element: <NoEncontradaPage />
-  }
+  { path: '*', element: <NoEncontradaPage /> }
 ]);

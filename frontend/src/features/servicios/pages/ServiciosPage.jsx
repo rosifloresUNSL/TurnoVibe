@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { serviciosService } from '../services/serviciosService';
 import { TarjetaServicio } from '../components/TarjetaServicio';
 
 export function ServiciosPage() {
   const [servicios, setServicios] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [filtroCategoria, setFiltroCategoria] = useState('');
+  const [filtroCategoria, setFiltroCategoria] = useState('Todas');
 
   useEffect(() => {
     serviciosService.obtenerTodos().then((data) => {
@@ -17,9 +18,9 @@ export function ServiciosPage() {
   const categorias = ['Todas', ...new Set(servicios.map((s) => s.categoria))];
 
   const serviciosFiltrados =
-    filtroCategoria && filtroCategoria !== 'Todas'
-      ? servicios.filter((s) => s.categoria === filtroCategoria)
-      : servicios;
+    filtroCategoria === 'Todas'
+      ? servicios
+      : servicios.filter((s) => s.categoria === filtroCategoria);
 
   return (
     <div className="container py-5">
@@ -53,13 +54,21 @@ export function ServiciosPage() {
           </div>
         </div>
       ) : (
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-          {serviciosFiltrados.map((s) => (
-            <div className="col" key={s.id}>
-              <TarjetaServicio servicio={s} enSeleccionar={() => {}} estaSeleccionado={false} />
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {serviciosFiltrados.map((s) => (
+              <div className="col" key={s.id}>
+                <TarjetaServicio servicio={s} />
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-5">
+            <Link to="/turnos" className="btn btn-primary btn-lg">
+              Reservar Turno
+            </Link>
+          </div>
+        </>
       )}
     </div>
   );
