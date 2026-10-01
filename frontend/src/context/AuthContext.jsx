@@ -1,38 +1,22 @@
 import { createContext, useContext, useState } from 'react';
-import usuariosData from '../data/usuarios.json';
+import { authService } from '../features/auth/services/authService';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [usuario, setUsuario] = useState(() => {
-    const sesionGuardada = localStorage.getItem('turnovibe_sesion');
-    return sesionGuardada ? JSON.parse(sesionGuardada) : null;
-  });
+  const [usuario, setUsuario] = useState(() => authService.obtenerUsuario());
 
   const login = (email, password) => {
-    const encontrado = usuariosData.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (encontrado) {
-      const datosSesion = {
-        id: encontrado.id,
-        nombre: encontrado.nombre,
-        email: encontrado.email,
-        rol: encontrado.rol,
-        peluqueroId: encontrado.peluqueroId || null
-      };
-      setUsuario(datosSesion);
-      localStorage.setItem('turnovibe_sesion', JSON.stringify(datosSesion));
-      return { exito: true, rol: encontrado.rol };
+    const resultado = authService.login(email, password);
+    if (resultado.exito) {
+      setUsuario(resultado.usuario);
     }
-
-    return { exito: false, mensaje: 'Credenciales inválidas' };
+    return resultado;
   };
 
   const logout = () => {
+    authService.logout();
     setUsuario(null);
-    localStorage.removeItem('turnovibe_sesion');
   };
 
   return (
@@ -42,4 +26,10 @@ export function AuthProvider({ children }) {
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  const contexto = useContext(AuthContext);
+  if (!contexto) {
+    throw new Error('useAuth debe usarse dentro de un <AuthProvider>.');
+  }
+  return contexto;
+}

@@ -1,4 +1,4 @@
-export function TarjetaServicio({ servicio, enSeleccionar, estaSeleccionado }) {
+export function TarjetaServicio({ servicio, enSeleccionar, estaSeleccionado = false }) {
   return (
     <div className={`card h-100 shadow-sm ${estaSeleccionado ? 'border-primary border-2' : ''}`}>
       <div className="card-body d-flex flex-column">
@@ -9,14 +9,16 @@ export function TarjetaServicio({ servicio, enSeleccionar, estaSeleccionado }) {
         <p className="card-text text-muted flex-grow-1">{servicio.descripcion}</p>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <span className="fw-bold fs-5 text-primary">${servicio.precio}</span>
-          <small className="text-muted">⏱ {servicio.duracion}</small>
+          <small className="text-muted">⏱ {servicio.duracionMinutos} min</small>
         </div>
-        <button
-          className={`btn ${estaSeleccionado ? 'btn-success' : 'btn-outline-primary'} w-100`}
-          onClick={() => enSeleccionar(servicio)}
-        >
-          {estaSeleccionado ? '✓ Seleccionado' : 'Seleccionar Servicio'}
-        </button>
+        {enSeleccionar && (
+          <button
+            className={`btn ${estaSeleccionado ? 'btn-success' : 'btn-outline-primary'} w-100`}
+            onClick={() => enSeleccionar(servicio)}
+          >
+            {estaSeleccionado ? '✓ Seleccionado' : 'Seleccionar Servicio'}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -2,18 +2,24 @@
   {
     "id": "corte",
     "nombre": "Corte de Cabello",
+    "categoria": "Cabello",
+    "descripcion": "Corte a tijera o máquina, con terminación y peinado.",
     "duracionMinutos": 30,
     "precio": 8000
   },
   {
     "id": "barba",
     "nombre": "Perfilado de Barba",
+    "categoria": "Barba",
+    "descripcion": "Perfilado y definición de contornos con navaja.",
     "duracionMinutos": 30,
     "precio": 5000
   },
   {
     "id": "decoloracion",
     "nombre": "Decoloración",
+    "categoria": "Cabello",
+    "descripcion": "Aclarado del cabello con productos profesionales.",
     "duracionMinutos": 30,
     "precio": 15000
   }

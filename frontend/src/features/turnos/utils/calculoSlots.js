@@ -112,3 +112,18 @@ export function obtenerSlotsSiguienteDisponible(listaPeluqueros, duracionMinutos
   // Ordenar horarios cronológicamente
   return slotsGlobales.sort((a, b) => a.horaInicio.localeCompare(b.horaInicio));
 }
+
+/**
+ * Devuelve una copia de la agenda con N bloques consecutivos marcados como ocupados.
+ * Función pura: no modifica el arreglo original.
+ */
+export function reservarBloque(agenda, horaInicio, bloques, cliente) {
+  const indiceInicio = agenda.findIndex((slot) => slot.hora === horaInicio);
+  if (indiceInicio === -1) return agenda;
+
+  return agenda.map((slot, indice) =>
+    indice >= indiceInicio && indice < indiceInicio + bloques
+      ? { ...slot, ocupado: true, cliente, tipo: 'Reserva Web' }
+      : slot
+  );
+}
