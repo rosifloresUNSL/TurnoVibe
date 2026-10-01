@@ -1,0 +1,443 @@
+{
+  "info": {
+    "name": "TurnoVibe API",
+    "description": "Collection del TP N.º 4. Usa la variable de entorno base_url.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "turnoId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Lectura",
+      "item": [
+        {
+          "name": "GET /turnos (lista)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/turnos"
+          }
+        },
+        {
+          "name": "GET /turnos/1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/turnos/1"
+          }
+        },
+        {
+          "name": "GET /turnos/999 (no existe)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/turnos/999"
+          }
+        },
+        {
+          "name": "GET /turnos/abc (id inválido)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/turnos/abc"
+          }
+        },
+        {
+          "name": "GET /turnos?fecha&estado (filtro)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/turnos?fecha=2026-10-02&estado=confirmado"
+          }
+        },
+        {
+          "name": "GET /peluqueros/1/turnos (anidado)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/peluqueros/1/turnos"
+          }
+        },
+        {
+          "name": "GET /peluqueros/99/turnos (no existe)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/peluqueros/99/turnos"
+          }
+        },
+        {
+          "name": "GET /servicios",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/servicios"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Escritura (ejecutar en orden)",
+      "item": [
+        {
+          "name": "POST /turnos (crear, 3 servicios = 90 min)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('turnoId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"peluqueroId\": 1,\n  \"servicios\": [\n    \"corte\",\n    \"barba\",\n    \"decoloracion\"\n  ],\n  \"fecha\": \"2026-10-02\",\n  \"horaInicio\": \"11:00\",\n  \"clienteNombre\": \"Diego Cuello\",\n  \"clienteEmail\": \"diego@ejemplo.com\",\n  \"clienteTelefono\": \"1144556677\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/api/turnos"
+          }
+        },
+        {
+          "name": "POST /turnos (mismo horario -> 409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"peluqueroId\": 1,\n  \"servicios\": [\n    \"corte\",\n    \"barba\",\n    \"decoloracion\"\n  ],\n  \"fecha\": \"2026-10-02\",\n  \"horaInicio\": \"11:00\",\n  \"clienteNombre\": \"Diego Cuello\",\n  \"clienteEmail\": \"diego@ejemplo.com\",\n  \"clienteTelefono\": \"1144556677\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/api/turnos"
+          }
+        },
+        {
+          "name": "POST /turnos (faltan campos -> 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteNombre\": \"Solo nombre\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/api/turnos"
+          }
+        },
+        {
+          "name": "POST /turnos (JSON mal formado -> 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"peluqueroId\": ",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/api/turnos"
+          }
+        },
+        {
+          "name": "PUT /turnos/:id (reemplazar)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"peluqueroId\": 1,\n  \"servicios\": [\n    \"corte\"\n  ],\n  \"fecha\": \"2026-10-02\",\n  \"horaInicio\": \"11:30\",\n  \"clienteNombre\": \"Diego Cuello\",\n  \"clienteEmail\": \"diego@ejemplo.com\",\n  \"clienteTelefono\": \"1144556677\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/api/turnos/{{turnoId}}"
+          }
+        },
+        {
+          "name": "DELETE /turnos/:id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/turnos/{{turnoId}}"
+          }
+        },
+        {
+          "name": "DELETE /turnos/:id (otra vez -> 404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/turnos/{{turnoId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Errores",
+      "item": [
+        {
+          "name": "GET /debug/error (500 a propósito)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 500', () => pm.response.to.have.status(500));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/debug/error"
+          }
+        },
+        {
+          "name": "GET /turnos (el servidor sigue vivo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/turnos"
+          }
+        },
+        {
+          "name": "GET /ruta-inexistente (404 JSON)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/ruta-inexistente"
+          }
+        }
+      ]
+    }
+  ]
+}
