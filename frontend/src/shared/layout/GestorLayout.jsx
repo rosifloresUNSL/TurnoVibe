@@ -1,4 +1,4 @@
-import { Outlet, Link, useNavigate } from 'react-router';
+import { Outlet, NavLink, useNavigate } from 'react-router';
 import { useAuth } from '../../context/AuthContext';
 
 export function GestorLayout() {
@@ -13,9 +13,11 @@ export function GestorLayout() {
   const esAdmin = usuario?.rol === 'admin';
   const rutaDashboard = esAdmin ? '/admin/dashboard' : '/staff/dashboard';
 
+  const claseEnlace = ({ isActive }) =>
+    `nav-link ${isActive ? 'active' : 'text-white-50'}`;
+
   return (
     <div className="d-flex min-vh-100">
-      {/* Sidebar de administración */}
       <aside className="bg-dark text-white p-3 d-flex flex-column" style={{ width: '250px' }}>
         <h4 className="fw-bold text-primary mb-2">TurnoVibe</h4>
         <span className="badge bg-secondary mb-3 align-self-start text-uppercase">
@@ -24,12 +26,12 @@ export function GestorLayout() {
         <p className="small text-muted mb-4">Bienvenido, {usuario?.nombre || 'Usuario'}</p>
 
         <nav className="nav nav-pills flex-column mb-auto gap-2">
-          <Link to={rutaDashboard} className="nav-link text-white active">
+          <NavLink to={rutaDashboard} className={claseEnlace}>
             📋 Panel de Control
-          </Link>
-          <Link to="/" className="nav-link text-white-50">
+          </NavLink>
+          <NavLink to="/" end className={claseEnlace}>
             🌐 Ir al Sitio Público
-          </Link>
+          </NavLink>
         </nav>
 
         <button onClick={handleCerrarSesion} className="btn btn-outline-danger w-100 mt-auto">
@@ -37,7 +39,6 @@ export function GestorLayout() {
         </button>
       </aside>
 
-      {/* Contenido dinámico del Panel */}
       <main className="flex-grow-1 bg-light p-4 overflow-auto">
         <Outlet />
       </main>

@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router';
 
-export function Navbar() {
+const claseEnlace = ({ isActive }) => `nav-link${isActive ? ' active' : ''}`;
+
+export function Encabezado() {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   const alternarMenu = () => setMenuAbierto((prev) => !prev);
@@ -29,19 +31,19 @@ export function Navbar() {
         >
           <ul className="navbar-nav ms-auto gap-2">
             <li className="nav-item">
-              <Link to="/" className="nav-link" onClick={cerrarMenu}>
+              <NavLink to="/" end className={claseEnlace} onClick={cerrarMenu}>
                 Inicio
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link to="/turnos" className="nav-link" onClick={cerrarMenu}>
+              <NavLink to="/turnos" className={claseEnlace} onClick={cerrarMenu}>
                 Reservar Turno
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link to="/servicios" className="nav-link" onClick={cerrarMenu}>
+              <NavLink to="/servicios" className={claseEnlace} onClick={cerrarMenu}>
                 Servicios
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
               <Link to="/login" className="btn btn-outline-light ms-lg-2" onClick={cerrarMenu}>

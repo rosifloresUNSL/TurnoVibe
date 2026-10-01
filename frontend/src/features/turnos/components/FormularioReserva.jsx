@@ -1,17 +1,14 @@
 import { useState, useRef } from 'react';
 import { validarFormularioReserva } from '../utils/validaciones';
 
-export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enConfirmacionExitosa }) {
+export function FormularioReserva({ enConfirmar }) {
   const [valores, setValores] = useState({
     nombre: '',
     email: '',
     telefono: '',
     notas: ''
   });
-
   const [errores, setErrores] = useState({});
-
-  const [estadoEnvio, setEstadoEnvio] = useState('escribiendo');
 
   const inputRefs = {
     nombre: useRef(null),
@@ -21,16 +18,10 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setValores((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    setValores((prev) => ({ ...prev, [name]: value }));
 
     if (errores[name]) {
-      setErrores((prev) => ({
-        ...prev,
-        [name]: null
-      }));
+      setErrores((prev) => ({ ...prev, [name]: null }));
     }
   };
 
@@ -41,43 +32,17 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
     setErrores(nuevosErrores);
 
     const camposConError = Object.keys(nuevosErrores);
-
     if (camposConError.length > 0) {
-      const primerCampoConError = camposConError[0];
-      if (inputRefs[primerCampoConError] && inputRefs[primerCampoConError].current) {
-        inputRefs[primerCampoConError].current.focus();
-      }
+      inputRefs[camposConError[0]]?.current?.focus();
       return;
     }
 
-    setEstadoEnvio('enviando');
-
-    setTimeout(() => {
-      setEstadoEnvio('enviado');
-      enConfirmacionExitosa({
-        cliente: valores,
-        turno: turnoSeleccionado,
-        servicio: servicioSeleccionado
-      });
-    }, 1500);
+    enConfirmar(valores);
   };
 
-  if (estadoEnvio === 'enviado') {
-    return (
-      <div className="alert alert-success mt-4 p-4 text-center" role="alert">
-        <h4 className="alert-heading fw-bold">¡Reserva Confirmada!</h4>
-        <p className="mb-0">
-          Gracias <strong>{valores.nombre}</strong>. Se ha enviado el comprobante a{' '}
-          <strong>{valores.email}</strong>.
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit} noValidate className="mt-4 border-top pt-4">
-      <h5 className="fw-bold mb-3">Paso 3: Complete sus datos de contacto</h5>
-
+    <form onSubmit={handleSubmit} noValidate className="mt-2">
+      <h5 className="fw-bold mb-3">4. Completá tus datos de contacto</h5>
 
       <div className="mb-3">
         <label htmlFor="nombre" className="form-label fw-bold">
@@ -91,7 +56,6 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
           className={`form-control ${errores.nombre ? 'is-invalid' : ''}`}
           value={valores.nombre}
           onChange={handleChange}
-          disabled={estadoEnvio === 'enviando'}
           placeholder="Ej: Juan Pérez"
         />
         {errores.nombre && <div className="invalid-feedback">{errores.nombre}</div>}
@@ -109,7 +73,6 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
           className={`form-control ${errores.email ? 'is-invalid' : ''}`}
           value={valores.email}
           onChange={handleChange}
-          disabled={estadoEnvio === 'enviando'}
           placeholder="nombre@ejemplo.com"
         />
         {errores.email && <div className="invalid-feedback">{errores.email}</div>}
@@ -127,7 +90,6 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
           className={`form-control ${errores.telefono ? 'is-invalid' : ''}`}
           value={valores.telefono}
           onChange={handleChange}
-          disabled={estadoEnvio === 'enviando'}
           placeholder="Ej: 1122334455"
         />
         {errores.telefono && <div className="invalid-feedback">{errores.telefono}</div>}
@@ -144,28 +106,12 @@ export function FormularioReserva({ turnoSeleccionado, servicioSeleccionado, enC
           className="form-control"
           value={valores.notas}
           onChange={handleChange}
-          disabled={estadoEnvio === 'enviando'}
-          placeholder="Indique cualquier aclaración adicional..."
+          placeholder="Indicá cualquier aclaración adicional..."
         ></textarea>
       </div>
 
-      <button
-        type="submit"
-        className="btn btn-success btn-lg w-100"
-        disabled={estadoEnvio === 'enviando'}
-      >
-        {estadoEnvio === 'enviando' ? (
-          <>
-            <span
-              className="spinner-border spinner-border-sm me-2"
-              role="status"
-              aria-hidden="true"
-            ></span>
-            Procesando Reserva...
-          </>
-        ) : (
-          'Confirmar y Reservar Turno'
-        )}
+      <button type="submit" className="btn btn-success btn-lg w-100">
+        Confirmar y Reservar Turno
       </button>
     </form>
   );
