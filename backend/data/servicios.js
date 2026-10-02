@@ -1,0 +1,8 @@
+// Catálogo de servicios (solo lectura). Mismos valores que el frontend.
+const servicios = [
+  { id: 'corte', nombre: 'Corte de Cabello', duracionMinutos: 30, precio: 8000 },
+  { id: 'barba', nombre: 'Perfilado de Barba', duracionMinutos: 30, precio: 5000 },
+  { id: 'decoloracion', nombre: 'Decoloración', duracionMinutos: 30, precio: 15000 }
+];
+
+module.exports = servicios;
