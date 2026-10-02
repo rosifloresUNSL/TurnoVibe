@@ -1,5 +1,7 @@
-// Middleware de validación (Parte D, ejercicio 3): corta con 400 antes de llegar a la ruta.
-const catalogo = require('../data/servicios');
+// Middleware de validación: corta con 400 antes de llegar a la ruta.
+const serviciosRepository = require('../repositories/serviciosRepository');
+const asyncHandler = require('../utils/asyncHandler');
+const { calcularDuracion } = require('../services/turnosService');
 const {
   HORA_APERTURA,
   HORA_CIERRE,
@@ -7,7 +9,13 @@ const {
   esHoraValida,
   horaAMinutos
 } = require('../utils/horarios');
-const { calcularDuracion } = require('../services/turnosService');
+const {
+  ESTADOS_VALIDOS,
+  REGEX_EMAIL,
+  estaVacio,
+  esFechaValida,
+  esIdValido
+} = require('../utils/validaciones');
 
 const CAMPOS_OBLIGATORIOS = [
   'peluqueroId',
@@ -18,32 +26,14 @@ const CAMPOS_OBLIGATORIOS = [
   'clienteEmail',
   'clienteTelefono'
 ];
-const ESTADOS_VALIDOS = ['pendiente_pago', 'confirmado', 'cancelado'];
-const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function estaVacio(valor) {
-  return (
-    valor === undefined ||
-    valor === null ||
-    (typeof valor === 'string' && valor.trim() === '') ||
-    (Array.isArray(valor) && valor.length === 0)
-  );
-}
-
-function esFechaValida(texto) {
-  if (typeof texto !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(texto)) return false;
-  // Rechaza fechas inexistentes como 2026-02-31: al reconvertir, el texto cambiaría.
-  const fecha = new Date(`${texto}T00:00:00Z`);
-  return !Number.isNaN(fecha.getTime()) && fecha.toISOString().slice(0, 10) === texto;
-}
-
-// Función pura: recibe el body y devuelve qué falta y qué está mal. Fácil de probar.
-function validarDatosTurno(body) {
+// Función pura: recibe el body y el catálogo de servicios y devuelve qué falta y qué está mal.
+function validarDatosTurno(body, catalogo) {
   const camposFaltantes = CAMPOS_OBLIGATORIOS.filter((campo) => estaVacio(body[campo]));
   const detalles = {};
 
-  if (!camposFaltantes.includes('peluqueroId') && !Number.isInteger(body.peluqueroId)) {
-    detalles.peluqueroId = 'Debe ser un número entero.';
+  if (!camposFaltantes.includes('peluqueroId') && !esIdValido(body.peluqueroId)) {
+    detalles.peluqueroId = 'Debe ser un número entero positivo.';
   }
 
   let serviciosOk = false;
@@ -74,7 +64,7 @@ function validarDatosTurno(body) {
       detalles.horaInicio = `El local abre a las ${HORA_APERTURA}.`;
     } else if (serviciosOk) {
       // El bloque completo debe entrar antes del cierre.
-      const fin = horaAMinutos(body.horaInicio) + calcularDuracion(body.servicios);
+      const fin = horaAMinutos(body.horaInicio) + calcularDuracion(body.servicios, catalogo);
       if (fin > horaAMinutos(HORA_CIERRE)) {
         detalles.horaInicio = `Con esos servicios el turno terminaría después del cierre (${HORA_CIERRE}).`;
       }
@@ -108,13 +98,14 @@ function validarDatosTurno(body) {
   return { camposFaltantes, detalles };
 }
 
-function validarTurno(req, res, next) {
+const validarTurno = asyncHandler(async (req, res, next) => {
   // Express 5: si el cliente no manda JSON, req.body es undefined (en Express 4 era {}).
-  // Se normaliza para que funcione igual en ambas versiones.
   const sinBody = req.body === undefined;
   const body = req.body && typeof req.body === 'object' && !Array.isArray(req.body) ? req.body : {};
 
-  const { camposFaltantes, detalles } = validarDatosTurno(body);
+  // El catálogo vive en la base: se consulta y se deja en req para que la ruta lo reutilice.
+  const catalogo = await serviciosRepository.listar();
+  const { camposFaltantes, detalles } = validarDatosTurno(body, catalogo);
 
   if (camposFaltantes.length > 0) {
     return res.status(400).json({
@@ -130,7 +121,8 @@ function validarTurno(req, res, next) {
     return res.status(400).json({ error: 'Hay campos con valores inválidos.', detalles });
   }
 
+  req.catalogoServicios = catalogo;
   next();
-}
+});
 
 module.exports = { validarTurno, validarDatosTurno };
