@@ -1,0 +1,49 @@
+name: turnovibe
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: turnovibe-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Falta POSTGRES_USER en .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Falta POSTGRES_DB en .env}
+    ports:
+      # Solo accesible desde tu máquina (127.0.0.1), no desde la red.
+      # Si ya tenés un Postgres local en el 5432, cambiá el primero: "127.0.0.1:5433:5432"
+      # y usá el 5433 en DATABASE_URL.
+      - "127.0.0.1:5432:5432"
+    volumes:
+      # Volumen con nombre: los datos sobreviven a "docker compose down" (se borran con -v).
+      - pgdata:/var/lib/postgresql/data
+      # Scripts SQL que se ejecutan solo la primera vez (base vacía), en orden alfabético.
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # -h 127.0.0.1 fuerza TCP: durante la inicialización Postgres solo escucha por socket
+      # local, y sin esto el healthcheck daría "ok" antes de terminar de cargar los scripts.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # La API también puede correr en contenedor. Es opcional (perfil "api"):
+  #   npm run docker:api
+  # Para desarrollar con recarga automática conviene "npm run dev" fuera de Docker.
+  api:
+    profiles: ["api"]
+    build: .
+    container_name: turnovibe-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      # Dentro de la red de Docker, el host de la base es el NOMBRE DEL SERVICIO ("db"),
+      # no localhost.
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:

@@ -1,17 +1,21 @@
 {
   "name": "turnovibe-backend",
-  "version": "1.0.0",
-  "description": "Web Service REST de TurnoVibe (Node.js + Express, datos en memoria)",
+  "version": "2.0.0",
+  "description": "Web Service REST de TurnoVibe (Node.js + Express + PostgreSQL)",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node --env-file=.env server.js",
+    "dev": "node --watch --env-file=.env server.js",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d db",
+    "docker:api": "docker compose --profile api up --build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.23.1"
   }
 }
