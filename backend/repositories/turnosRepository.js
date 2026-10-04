@@ -131,4 +131,20 @@ async function eliminar(id) {
   return rowCount > 0;
 }
 
-module.exports = { listar, obtenerPorId, crear, reemplazar, eliminar };
+// Para calcular disponibilidad: solo horarios ocupados, SIN datos de clientes.
+// Los turnos cancelados no ocupan; los pendiente_pago sí (reserva temporal).
+async function listarOcupados({ fecha }) {
+  const { rows } = await query(
+    `SELECT peluquero_id               AS "peluqueroId",
+            left(hora_inicio::text, 5) AS "horaInicio",
+            left(hora_fin::text, 5)    AS "horaFin"
+       FROM turnos
+      WHERE fecha = $1 AND estado <> 'cancelado'
+      ORDER BY hora_inicio`,
+    [fecha]
+  );
+  return rows;
+}
+
+module.exports = { listar, obtenerPorId, listarOcupados, crear, reemplazar, eliminar };
+
