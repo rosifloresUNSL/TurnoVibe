@@ -4,14 +4,14 @@
   "description": "Web Service REST de TurnoVibe (Node.js + Express + PostgreSQL)",
   "main": "server.js",
   "scripts": {
-    "start": "node --env-file=.env server.js",
-    "dev": "node --watch --env-file=.env server.js",
-    "db:seed": "node --env-file=.env db/seed-usuarios.js",
-    "db:up": "docker compose up -d db",
-    "db:down": "docker compose down",
-    "db:reset": "docker compose down -v && docker compose up -d db",
-    "docker:api": "docker compose --profile api up --build"
-  },
+  "start": "node --env-file=.env server.js",
+  "dev": "node --watch --env-file=.env server.js",
+  "db:seed": "node --env-file=.env db/seed-usuarios.js",
+  "db:up": "docker compose up -d db",
+  "db:down": "docker compose down",
+  "db:reset": "docker compose down -v && docker compose up -d db",
+  "docker:api": "docker compose --profile api up --build"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
