@@ -18,7 +18,14 @@ function traducirErrorPostgres(err) {
             ? 'El peluquero indicado no existe.'
             : 'Se hace referencia a un recurso que no existe.'
       };
-    case '23505': // unique_violation
+        case '23505': // unique_violation
+      return {
+        status: 409,
+        error:
+          err.constraint === 'usuarios_email_uk'
+            ? 'Ya existe un usuario con ese email.'
+            : 'Ya existe un registro con esos datos.'
+      };
       return { status: 409, error: 'Ya existe un registro con esos datos.' };
     case '23514': // check_violation
       return { status: 400, error: 'Los datos no cumplen una regla de la base de datos.' };
