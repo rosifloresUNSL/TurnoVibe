@@ -1,6 +1,6 @@
 /**
  * Función pura que valida el objeto de valores del formulario.
- * @param {Object} valores - Objeto con { nombre, email, telefono, notas }
+ * @param {Object} valores - Objeto con { nombre, email, telefono}
  * @returns {Object} Objeto 'errores' con los mensajes por cada campo inválido.
  */
 export function validarFormularioReserva(valores) {

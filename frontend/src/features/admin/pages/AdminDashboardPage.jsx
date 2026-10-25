@@ -1,133 +1,37 @@
-import { useState } from 'react';
-import peluquerosIniciales from '../../../data/peluqueros.json';
+import { estadisticasApi, peluquerosApi } from '../../../api/endpoints';
+import { useCargaDatos } from '../../../shared/hooks/useCargaDatos';
+import { EstadoCarga } from '../../../shared/components/EstadoCarga';
+import { primerDiaDelMes, ultimoDiaDelMes } from '../../../shared/utils/fechas';
+import { ResumenGlobal } from '../components/ResumenGlobal';
+import { GestionPeluqueros } from '../components/GestionPeluqueros';
+import { AgendaConsolidada } from '../components/AgendaConsolidada';
 
 export function AdminDashboardPage() {
-  const [peluqueros, setPeluqueros] = useState(peluquerosIniciales);
-  const [nuevoNombre, setNuevoNombre] = useState('');
+  const peluqueros = useCargaDatos(peluquerosApi.listar);
+  const estadisticas = useCargaDatos(
+    () => estadisticasApi.obtener({ desde: primerDiaDelMes(), hasta: ultimoDiaDelMes() }),
+    []
+  );
 
-  // 3.1 CRUD Peluqueros
-  const handleAgregarPeluquero = (e) => {
-    e.preventDefault();
-    if (!nuevoNombre.trim()) return;
-
-    const nuevo = {
-      id: Date.now(),
-      nombre: nuevoNombre,
-      agenda: [
-        { hora: '09:00', ocupado: false },
-        { hora: '09:30', ocupado: false },
-        { hora: '10:00', ocupado: false },
-        { hora: '10:30', ocupado: false }
-      ]
-    };
-
-    setPeluqueros([...peluqueros, nuevo]);
-    setNuevoNombre('');
-  };
-
-  const handleEliminarPeluquero = (id) => {
-    setPeluqueros(peluqueros.filter((p) => p.id !== id));
+  // Al crear o borrar un peluquero cambian la lista y los números del dashboard.
+  const alCambiarPeluqueros = () => {
+    peluqueros.recargar();
+    estadisticas.recargar();
   };
 
   return (
     <div className="container py-4">
-      <h2 className="fw-bold mb-4">Dashboard Global - Dueño / Admin</h2>
+      <h2 className="fw-bold mb-1">Panel de Administración</h2>
+      <p className="text-muted mb-4">Estadísticas del mes, equipo y agenda</p>
 
-      {/* 3.1 Estadísticas Consolidadas */}
-      <div className="row g-3 mb-5">
-        <div className="col-md-3">
-          <div className="card p-3 bg-primary text-white shadow-sm">
-            <span className="small text-uppercase">Recaudación Mensual</span>
-            <h3 className="fw-bold mb-0">$485,000</h3>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card p-3 bg-success text-white shadow-sm">
-            <span className="small text-uppercase">Servicio Más Pedido</span>
-            <h3 className="fw-bold mb-0">Corte (54%)</h3>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card p-3 bg-dark text-white shadow-sm">
-            <span className="small text-uppercase">Peluquero Solicitado</span>
-            <h3 className="fw-bold mb-0">Franco</h3>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="card p-3 bg-warning text-dark shadow-sm">
-            <span className="small text-uppercase">Tasa de Cancelación</span>
-            <h3 className="fw-bold mb-0">3.2%</h3>
-          </div>
-        </div>
-      </div>
+      <EstadoCarga cargando={estadisticas.cargando && !estadisticas.datos} error={estadisticas.error} onReintentar={estadisticas.recargar}>
+        {estadisticas.datos && <ResumenGlobal estadisticas={estadisticas.datos} />}
+      </EstadoCarga>
 
-      {/* 3.1 CRUD de Peluqueros */}
-      <div className="card p-4 border mb-5">
-        <h4 className="fw-bold mb-3">Gestión de Peluqueros (CRUD)</h4>
-        <form onSubmit={handleAgregarPeluquero} className="row g-2 mb-4">
-          <div className="col-md-8">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Nombre del nuevo peluquero"
-              value={nuevoNombre}
-              onChange={(e) => setNuevoNombre(e.target.value)}
-            />
-          </div>
-          <div className="col-md-4">
-            <button type="submit" className="btn btn-success w-100 fw-bold">
-              + Registrar Peluquero
-            </button>
-          </div>
-        </form>
-
-        <ul className="list-group">
-          {peluqueros.map((p) => (
-            <li key={p.id} className="list-group-item d-flex justify-content-between align-items-center">
-              <span className="fw-bold">{p.nombre}</span>
-              <button
-                className="btn btn-outline-danger btn-sm"
-                onClick={() => handleEliminarPeluquero(p.id)}
-              >
-                Eliminar
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* 3.1 Vista de Agenda Consolidada del Equipo */}
-      <div className="card p-4 border">
-        <h4 className="fw-bold mb-3">Agenda Consolidada del Equipo</h4>
-        <div className="table-responsive">
-          <table className="table table-bordered align-middle text-center">
-            <thead className="table-dark">
-              <tr>
-                <th>Horario</th>
-                {peluqueros.map((p) => (
-                  <th key={p.id}>{p.nombre}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00'].map((hora) => (
-                <tr key={hora}>
-                  <td className="fw-bold bg-light">{hora} hs</td>
-                  {peluqueros.map((p) => {
-                    const slot = p.agenda?.find((a) => a.hora === hora);
-                    const ocupado = slot ? slot.ocupado : false;
-                    return (
-                      <td key={p.id} className={ocupado ? 'table-danger' : 'table-success'}>
-                        {ocupado ? 'Ocupado' : 'Disponible'}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <EstadoCarga cargando={peluqueros.cargando && !peluqueros.datos} error={peluqueros.error} onReintentar={peluqueros.recargar}>
+        <GestionPeluqueros peluqueros={peluqueros.datos ?? []} onCambio={alCambiarPeluqueros} />
+        <AgendaConsolidada peluqueros={peluqueros.datos ?? []} />
+      </EstadoCarga>
     </div>
   );
 }

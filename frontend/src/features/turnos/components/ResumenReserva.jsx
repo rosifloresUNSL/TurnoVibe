@@ -1,9 +1,8 @@
 import { Tarjeta } from '../../../shared/components/Tarjeta';
-import { calcularDuracionTotal } from '../utils/calculoSlots';
 
 export function ResumenReserva({ serviciosSeleccionados, fecha, slot }) {
   const cantidad = serviciosSeleccionados.length;
-  const duracion = calcularDuracionTotal(serviciosSeleccionados);
+  const duracion = serviciosSeleccionados.reduce((total, s) => total + s.duracionMinutos, 0);
   const precioTotal = serviciosSeleccionados.reduce((total, s) => total + s.precio, 0);
 
   return (

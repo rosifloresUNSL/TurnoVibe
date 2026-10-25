@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router';
+import { useAuth } from '../../context/AuthContext';
 
 const claseEnlace = ({ isActive }) => `nav-link${isActive ? ' active' : ''}`;
 
 export function Encabezado() {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const { usuario } = useAuth();
+  const rutaPanel = usuario?.rol === 'admin' ? '/admin/dashboard' : '/staff/dashboard';
 
   const alternarMenu = () => setMenuAbierto((prev) => !prev);
   const cerrarMenu = () => setMenuAbierto(false);
@@ -46,8 +49,12 @@ export function Encabezado() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <Link to="/login" className="btn btn-outline-light ms-lg-2" onClick={cerrarMenu}>
-                Acceso Staff
+              <Link
+                to={usuario ? rutaPanel : '/login'}
+                className="btn btn-outline-light ms-lg-2"
+                onClick={cerrarMenu}
+              >
+                {usuario ? 'Mi panel' : 'Acceso Staff'}
               </Link>
             </li>
           </ul>

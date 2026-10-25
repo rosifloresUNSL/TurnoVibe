@@ -1,75 +1,84 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { useAuth } from '../../../context/AuthContext';
 
 export function LoginPage() {
+  const navigate = useNavigate();
+  const { usuario, cargando, login } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
-  const {login} = useAuth();
+  const [enviando, setEnviando] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Si ya hay sesión iniciada, no tiene sentido mostrar el login.
+  if (!cargando && usuario) {
+    return <Navigate to={usuario.rol === 'admin' ? '/admin/dashboard' : '/staff/dashboard'} replace />;
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
-    const resultado = login(email, password);
-
-    if (resultado.exito) {
-      const rol = resultado.usuario.rol;
-      if (rol === 'admin') {
-        navigate('/admin/dashboard', { replace: true });
-      } else {
-        navigate('/staff/dashboard', { replace: true });
-      }
-    } else {
-      setError(resultado.mensaje);
+    setEnviando(true);
+    try {
+      const sesion = await login(email, password);
+      navigate(sesion.rol === 'admin' ? '/admin/dashboard' : '/staff/dashboard', { replace: true });
+    } catch (err) {
+      // 401: credenciales inválidas · 429: demasiados intentos · 0: sin conexión
+      setError(err.message);
+    } finally {
+      setEnviando(false);
     }
   };
 
   return (
-    <div className="container py-5 d-flex justify-content-center">
-      <div className="card shadow-sm p-4 border-0" style={{ maxWidth: '420px', width: '100%' }}>
-        <h3 className="fw-bold text-center mb-4">Acceso TurnoVibe</h3>
-        
-        {error && <div className="alert alert-danger py-2 mb-3">{error}</div>}
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-md-5 col-lg-4">
+          <div className="card shadow-sm p-4">
+            <h2 className="fw-bold text-center mb-1">Acceso del equipo</h2>
+            <p className="text-muted text-center small mb-4">Para administradores y peluqueros</p>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label fw-bold">Correo Electrónico</label>
-            <input
-              type="email"
-              className="form-control"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@turnovibe.com / franco@turnovibe.com"
-            />
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label fw-bold">
+                  Correo electrónico
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  className="form-control"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="username"
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label fw-bold">
+                  Contraseña
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  className="form-control"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-primary w-100 fw-bold" disabled={enviando}>
+                {enviando ? 'Ingresando...' : 'Ingresar'}
+              </button>
+            </form>
           </div>
-
-          <div className="mb-4">
-            <label className="form-label fw-bold">Contraseña</label>
-            <input
-              type="password"
-              className="form-control"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="admin / staff"
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary w-100 fw-bold py-2">
-            Iniciar Sesión
-          </button>
-        </form>
-
-        <div className="mt-4 pt-3 border-top text-muted small">
-          <p className="mb-1"><strong>Credenciales de prueba (Mock):</strong></p>
-          <ul className="mb-0 ps-3">
-            <li><strong>Admin:</strong> admin@turnovibe.com / admin</li>
-            <li><strong>Staff:</strong> franco@turnovibe.com / staff</li>
-          </ul>
         </div>
       </div>
     </div>

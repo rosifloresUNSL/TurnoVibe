@@ -22,22 +22,41 @@ function emailDe(nombre) {
 
 // Si el email existe actualiza la clave; si no, lo crea.
 async function guardarUsuario({ nombre, email, password, rol, peluqueroId }) {
+  console.log('Guardando usuario:', email);
+
   const passwordHash = await bcrypt.hash(password, 10);
-  const existente = await pool.query('SELECT id FROM usuarios WHERE lower(email) = lower($1)', [email]);
+
+  console.log('Buscando usuario existente:', email);
+
+  const existente = await pool.query(
+    'SELECT id FROM usuarios WHERE lower(email) = lower($1)',
+    [email]
+  );
+
+  console.log('Resultado búsqueda:', existente.rows);
 
   if (existente.rows.length > 0) {
-    await pool.query('UPDATE usuarios SET nombre = $2, password_hash = $3, activo = true WHERE id = $1', [
-      existente.rows[0].id,
-      nombre,
-      passwordHash
-    ]);
+    console.log('Actualizando:', email);
+
+    await pool.query(
+      'UPDATE usuarios SET nombre = $2, password_hash = $3, activo = true WHERE id = $1',
+      [
+        existente.rows[0].id,
+        nombre,
+        passwordHash
+      ]
+    );
+
     return 'actualizado';
   }
+
+  console.log('Insertando:', email);
 
   await pool.query(
     'INSERT INTO usuarios (nombre, email, password_hash, rol, peluquero_id) VALUES ($1, $2, $3, $4, $5)',
     [nombre, email, passwordHash, rol, peluqueroId]
   );
+
   return 'creado';
 }
 
