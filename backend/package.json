@@ -9,7 +9,7 @@
   "db:seed": "node --env-file=.env db/seed-usuarios.js",
   "db:up": "docker compose up -d db",
   "db:down": "docker compose down",
-  "db:reset": "docker compose down -v && docker compose up -d db",
+  "db:reset": "docker compose down -v && docker compose up -d db && docker compose exec db sh -c 'until pg_isready -U $POSTGRES_USER -d $POSTGRES_DB; do sleep 1; done'",
   "docker:api": "docker compose --profile api up --build"
 },
   "keywords": [],

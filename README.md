@@ -7,32 +7,47 @@ Plataforma web para reservas de barbería sin registro, con prevención de *doub
 
 ## Características
 
-* **Stack:** React, Vite, Bootstrap 5, React Router v8.
-* **Reserva sin login:** 
+* **Stack:** React 19, Vite, Bootstrap 5, React Router v7 · Node.js, Express 5 · PostgreSQL 17 (Docker).
+* **Reserva sin login:**
   * Multiselección de servicios (Corte, Barba, Decoloración de 30 min c/u).
-  * Cálculo dinámico de bloques continuos (30, 60 o 90 min).
+  * Bloques continuos de 30, 60 o 90 min, calculados por el servidor.
   * Modalidades: **Por Peluquero** o **Siguiente Disponible**.
-* **Roles y Seguridad:**
-  * **Admin:** Métricas globales, CRUD de peluqueros y agenda unificada.
-  * **Staff:** Métricas propias, agenda personal y bloqueo manual de turnos.
-* **Checkout (En progreso):** Bloqueo temporal de 15 minutos con Mercado Pago.
+  * Sin doble reserva: lo garantiza la base de datos (restricción `EXCLUDE`), incluso con solicitudes simultáneas.
+* **Roles y seguridad (JWT + bcrypt):**
+  * **Admin:** indicadores globales, CRUD de peluqueros (con su cuenta de acceso) y agenda consolidada.
+  * **Staff:** indicadores propios, agenda personal y carga manual de turnos. Solo ve y modifica su agenda.
+* **Checkout (en progreso):** bloqueo temporal de 15 minutos con Mercado Pago.
 
 ---
 
-## Usuarios de Prueba
+## Inicio rápido
 
-* **Admin:** `admin@turnovibe.com` / `admin`
-* **Staff:** `franco@turnovibe.com` / `staff`
-
----
-
-## Inicio Rápido
+Requisitos: Node 22 y Docker Desktop.
 
 ```bash
+# 1) Backend + base de datos
+cd backend
+cp .env.example .env          # completar claves y JWT_SECRET (ver comentarios del archivo)
 npm install
-npm run dev
-* **Páginas Secundarias e Interactividad:**
-  * `index.html`: Página principal con el formulario de reserva e imagen de fondo full screen.
-  * `servicios.html`: Tabla de datos con precios y tiempos por servicio.
-  * `peluqueros.html`: Lista de miembros del equipo con índice ordenado y marcadores internos para saltar de sección.
-  * `admin.html`: Vista previa del inicio de sesión y panel de control para el administrador.
+npm run db:up                 # levanta PostgreSQL en Docker
+npm run db:seed               # crea las cuentas de ejemplo (claves de .env)
+npm run dev                   # API en http://localhost:3000
+
+# 2) Frontend (en otra terminal)
+cd frontend
+cp .env.example .env          # VITE_API_URL=http://localhost:3000
+npm install
+npm run dev                   # http://localhost:5173
+```
+
+## Usuarios de prueba
+
+Se crean con `npm run db:seed`; las contraseñas son las de `SEED_ADMIN_PASSWORD` y `SEED_STAFF_PASSWORD` en `backend/.env`.
+
+* **Admin:** `admin@turnovibe.com`
+* **Staff:** `franco@turnovibe.com`, `mateo@turnovibe.com`, `lucas@turnovibe.com`
+
+## Documentación
+
+* API y base de datos: [`backend/README.md`](backend/README.md)
+* Colecciones de Postman: `backend/postman/`

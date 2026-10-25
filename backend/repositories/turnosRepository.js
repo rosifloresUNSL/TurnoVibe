@@ -58,10 +58,16 @@ async function obtenerPorId(id) {
   return rows[0] ?? null;
 }
 
-// Inserta los servicios de un turno con una sola consulta: unnest convierte el arreglo en filas.
+// Inserta los servicios de un turno con una sola consulta y GUARDA el precio vigente de cada uno
+// (precio_unitario). ON CONFLICT DO NOTHING: si el servicio ya estaba en el turno (caso del PUT)
+// se conserva el precio original y no se pisa con el actual.
 function insertarServicios(client, turnoId, idsServicios) {
   return client.query(
-    'INSERT INTO turno_servicios (turno_id, servicio_id) SELECT $1, unnest($2::text[])',
+    `INSERT INTO turno_servicios (turno_id, servicio_id, precio_unitario)
+     SELECT $1, s.id, s.precio
+       FROM servicios s
+      WHERE s.id = ANY($2::text[])
+     ON CONFLICT (turno_id, servicio_id) DO NOTHING`,
     [turnoId, idsServicios]
   );
 }
@@ -118,7 +124,12 @@ async function reemplazar(id, turno) {
     );
     if (rowCount === 0) return false;
 
-    await client.query('DELETE FROM turno_servicios WHERE turno_id = $1', [id]);
+    // Se borran solo los servicios que ya no están en el turno; los que se mantienen conservan
+    // su precio histórico, y los nuevos entran con el precio de hoy.
+    await client.query(
+      'DELETE FROM turno_servicios WHERE turno_id = $1 AND servicio_id <> ALL($2::text[])',
+      [id, turno.servicios]
+    );
     await insertarServicios(client, id, turno.servicios);
     return true;
   });

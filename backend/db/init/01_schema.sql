@@ -46,8 +46,11 @@ CREATE TABLE turnos (
 CREATE INDEX turnos_fecha_idx ON turnos (fecha);
 
 -- Relación muchos-a-muchos: un turno incluye 1, 2 o 3 servicios.
+-- precio_unitario guarda el precio que tenía el servicio AL RESERVAR: si después cambia el
+-- precio del catálogo, los ingresos históricos no se alteran.
 CREATE TABLE turno_servicios (
-  turno_id    INTEGER NOT NULL REFERENCES turnos (id) ON DELETE CASCADE,
-  servicio_id TEXT    NOT NULL REFERENCES servicios (id),
+  turno_id        INTEGER NOT NULL REFERENCES turnos (id) ON DELETE CASCADE,
+  servicio_id     TEXT    NOT NULL REFERENCES servicios (id),
+  precio_unitario INTEGER NOT NULL CHECK (precio_unitario >= 0),
   PRIMARY KEY (turno_id, servicio_id)
 );

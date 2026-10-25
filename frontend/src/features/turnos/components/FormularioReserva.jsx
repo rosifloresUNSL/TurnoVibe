@@ -1,12 +1,11 @@
 import { useState, useRef } from 'react';
 import { validarFormularioReserva } from '../utils/validaciones';
 
-export function FormularioReserva({ enConfirmar }) {
+export function FormularioReserva({ enConfirmar, enviando = false }) {
   const [valores, setValores] = useState({
     nombre: '',
     email: '',
-    telefono: '',
-    notas: ''
+    telefono: ''
   });
   const [errores, setErrores] = useState({});
 
@@ -95,23 +94,8 @@ export function FormularioReserva({ enConfirmar }) {
         {errores.telefono && <div className="invalid-feedback">{errores.telefono}</div>}
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="notas" className="form-label fw-bold">
-          Notas o Preferencias (Opcional)
-        </label>
-        <textarea
-          id="notas"
-          name="notas"
-          rows="3"
-          className="form-control"
-          value={valores.notas}
-          onChange={handleChange}
-          placeholder="Indicá cualquier aclaración adicional..."
-        ></textarea>
-      </div>
-
-      <button type="submit" className="btn btn-success btn-lg w-100">
-        Confirmar y Reservar Turno
+      <button type="submit" className="btn btn-success btn-lg w-100" disabled={enviando}>
+        {enviando ? 'Reservando...' : 'Confirmar y Reservar Turno'}
       </button>
     </form>
   );

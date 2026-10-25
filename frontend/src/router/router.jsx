@@ -1,43 +1,14 @@
-import { createBrowserRouter, redirect } from 'react-router';
+import { createBrowserRouter } from 'react-router';
 import { PublicLayout } from '../shared/layout/PublicLayout';
 import { GestorLayout } from '../shared/layout/GestorLayout';
 import { NoEncontradaPage } from '../shared/pages/NoEncontradaPage';
+import { RutaProtegida } from './RutaProtegida';
 import { HomePage } from '../features/home';
 import { ServiciosPage } from '../features/servicios';
 import { ReservarTurnoPage } from '../features/turnos';
-import { LoginPage, authService } from '../features/auth';
+import { LoginPage } from '../features/auth';
 import { AdminDashboardPage } from '../features/admin/pages/AdminDashboardPage';
 import { StaffDashboardPage } from '../features/staff/pages/StaffDashboardPage';
-
-// Guardias de autenticación
-const protegerRutaAutenticada = () => {
-  if (!authService.estaAutenticado()) {
-    return redirect('/login');
-  }
-  return null;
-};
-
-const protegerRutaAdmin = () => {
-  if (!authService.estaAutenticado()) {
-    return redirect('/login');
-  }
-  const usuario = authService.obtenerUsuario();
-  if (usuario?.rol !== 'admin') {
-    return redirect('/staff/dashboard');
-  }
-  return null;
-};
-
-const redirigirSiAutenticado = () => {
-  if (authService.estaAutenticado()) {
-    const usuario = authService.obtenerUsuario();
-    if (usuario?.rol === 'admin') {
-      return redirect('/admin/dashboard');
-    }
-    return redirect('/staff/dashboard');
-  }
-  return null;
-};
 
 export const router = createBrowserRouter([
   /* RUTAS PÚBLICAS */
@@ -48,29 +19,37 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'servicios', element: <ServiciosPage /> },
       { path: 'turnos', element: <ReservarTurnoPage /> },
-      { path: 'login', loader: redirigirSiAutenticado, element: <LoginPage /> }
+      { path: 'login', element: <LoginPage /> }
     ]
   },
 
   /* RUTAS PRIVADAS (ADMINISTRADOR / DUEÑO) */
   {
-    path: '/admin',
-    element: <GestorLayout />,
-    loader: protegerRutaAdmin,
+    element: <RutaProtegida roles={['admin']} />,
     children: [
-      { index: true, element: <AdminDashboardPage /> },
-      { path: 'dashboard', element: <AdminDashboardPage /> }
+      {
+        path: '/admin',
+        element: <GestorLayout />,
+        children: [
+          { index: true, element: <AdminDashboardPage /> },
+          { path: 'dashboard', element: <AdminDashboardPage /> }
+        ]
+      }
     ]
   },
 
   /* RUTAS PRIVADAS (PELUQUERO / STAFF) */
   {
-    path: '/staff',
-    element: <GestorLayout />,
-    loader: protegerRutaAutenticada,
+    element: <RutaProtegida roles={['staff']} />,
     children: [
-      { index: true, element: <StaffDashboardPage /> },
-      { path: 'dashboard', element: <StaffDashboardPage /> }
+      {
+        path: '/staff',
+        element: <GestorLayout />,
+        children: [
+          { index: true, element: <StaffDashboardPage /> },
+          { path: 'dashboard', element: <StaffDashboardPage /> }
+        ]
+      }
     ]
   },
 
